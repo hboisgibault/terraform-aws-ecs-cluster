@@ -20,10 +20,6 @@ resource "aws_launch_configuration" "main_lc" {
   }
 
   user_data = "${data.template_file.user_data.rendered}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_autoscaling_policy" "main_asg_policy" {
