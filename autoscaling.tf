@@ -22,6 +22,7 @@ resource "aws_launch_configuration" "main_lc" {
   user_data = "${data.template_file.user_data.rendered}"
 }
 
+/*
 resource "aws_autoscaling_policy" "main_asg_policy" {
   name                   = "${var.application_name}-cpu-scale-policy"
   policy_type            = "TargetTrackingScaling"
@@ -34,6 +35,24 @@ resource "aws_autoscaling_policy" "main_asg_policy" {
     }
 
     target_value = 40.0
+  }
+}
+*/
+
+resource "aws_ecs_capacity_provider" "main_cp" {
+  name = var.application_name
+
+  auto_scaling_group_provider {
+    auto_scaling_group_arn         = aws_autoscaling_group.main_asg.arn
+    managed_termination_protection = "ENABLED"
+
+    managed_scaling {
+      maximum_scaling_step_size = 1
+      minimum_scaling_step_size = 1
+      status                    = "ENABLED"
+      target_capacity           = 100
+	  instance_warmup_period    = 20
+    }
   }
 }
 
@@ -54,5 +73,11 @@ resource "aws_autoscaling_group" "main_asg" {
     preferences {
       min_healthy_percentage = 100
     }
+  }
+  
+  tag {
+    key                 = "AmazonECSManaged"
+    value               = ""
+    propagate_at_launch = true
   }
 }

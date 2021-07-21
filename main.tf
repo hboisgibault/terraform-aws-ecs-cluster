@@ -16,6 +16,12 @@ data "aws_alb" "alb" {
 
 resource "aws_ecs_cluster" "main_cluster" {
   name        = var.application_name
+  capacity_providers   = [aws_ecs_capacity_provider.main_cp.name]
+  
+  default_capacity_provider_strategy {
+	capacity_provider   = aws_ecs_capacity_provider.main_cp.name
+	weight = 100
+  }
 
   tags = {
     Environment = var.environment_name
