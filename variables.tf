@@ -6,7 +6,6 @@ variable "region" {
 
 variable "vpc_id" {
   type    = string
-  default = "vpc-d7ded3be"
   description = "VPC ID where resources will be placed"
 }
 
@@ -39,13 +38,11 @@ variable "instance_type" {
 
 variable "alb_arn" {
     type = string
-    default = "arn:aws:elasticloadbalancing:eu-west-3:812844034365:loadbalancer/app/logora-main/b07504f433dc2038"
     description = "Application load balancer ARN"
 }
 
 variable "alb_security_group_id" {
     type = string
-    default = "sg-034c9a669c9a97438"
     description = "Load balancer security group"
 }
 
