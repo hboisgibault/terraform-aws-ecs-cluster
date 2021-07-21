@@ -31,7 +31,7 @@ resource "aws_ecs_service" "main_service" {
   cluster         = aws_ecs_cluster.main_cluster.id
   launch_type     = "EC2"
   scheduling_strategy = "REPLICA"
-  task_definition = "${aws_ecs_task_definition.main_td.family}:${max(aws_ecs_task_definition.main_td.revision, data.aws_ecs_task_definition.main_td.revision)}"
+  task_definition = "${data.aws_ecs_task_definition.main_td.family}:${data.aws_ecs_task_definition.main_td.revision}"
   desired_count   = var.target_capacity
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
