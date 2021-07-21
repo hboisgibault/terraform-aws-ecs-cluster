@@ -55,8 +55,4 @@ resource "aws_autoscaling_group" "main_asg" {
       min_healthy_percentage = 100
     }
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
