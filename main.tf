@@ -46,8 +46,8 @@ resource "aws_ecs_service" "main_service" {
   }
 
   ordered_placement_strategy {
-    type = "spread"
-    field = "instanceId"
+    type = "binpack"
+    field = "memory"
   }
 
   deployment_circuit_breaker {
