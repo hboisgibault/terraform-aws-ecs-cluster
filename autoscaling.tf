@@ -49,7 +49,7 @@ resource "aws_autoscaling_group" "main_asg" {
   desired_capacity     = var.target_capacity
   vpc_zone_identifier  = data.aws_subnet_ids.subnets.ids
   wait_for_capacity_timeout = "3m"
-  termination_policy   = "OldestInstance"
+  termination_policies   = ["OldestInstance"]
 
   instance_refresh {
     strategy = "Rolling"
