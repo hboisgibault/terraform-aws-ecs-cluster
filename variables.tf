@@ -63,6 +63,12 @@ variable "target_capacity" {
     description = "Service target capacity"
 }
 
+variable "min_size" {
+    type = number
+    default = 1
+    description = "Service minimum capacity"
+}
+
 variable "container_name" {
     type = string
     default = "app"

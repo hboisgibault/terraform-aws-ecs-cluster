@@ -24,6 +24,15 @@ resource "aws_ecs_cluster" "main_cluster" {
     base = 1
   }
 
+  provisioner "local-exec" {
+    when = destroy
+
+    command = <<CMD
+      aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${self.name} --min-size 0 --max-size 0 --desired-capacity 0
+      aws autoscaling delete-auto-scaling-group --auto-scaling-group-name ${self.name}
+    CMD
+  }
+
   tags = {
     Environment = var.environment_name
   }
