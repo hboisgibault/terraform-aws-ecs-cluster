@@ -41,7 +41,7 @@ resource "aws_ecs_capacity_provider" "main_cp" {
 resource "aws_autoscaling_group" "main_asg" {
   name                 = var.application_name
   launch_configuration = aws_launch_configuration.main_lc.name
-  min_size             = var.min_size
+  min_size             = var.target_capacity
   max_size             = var.target_capacity * 2
   health_check_type    = "EC2"
   health_check_grace_period = 0
