@@ -9,7 +9,7 @@ resource "aws_lb_target_group" "main_tg" {
 
   health_check {
     healthy_threshold = 2
-    interval = 15
+    interval = 11
     timeout = 10
     matcher = "200-301"
   }

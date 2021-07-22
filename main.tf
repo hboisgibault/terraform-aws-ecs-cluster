@@ -16,7 +16,14 @@ data "aws_alb" "alb" {
 
 resource "aws_ecs_cluster" "main_cluster" {
   name        = var.application_name
+  capacity_providers = [aws_ecs_capacity_provider.main_cp.name]
 
+  default_capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.main_cp.name
+    weight = 1
+    base = 1
+  }
+  
   tags = {
     Environment = var.environment_name
   }
@@ -35,9 +42,15 @@ resource "aws_ecs_service" "main_service" {
   desired_count   = var.target_capacity
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
-  health_check_grace_period_seconds  = 10
+  health_check_grace_period_seconds  = 0
   wait_for_steady_state = false
   force_new_deployment = true
+
+  capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.main_cp.name
+    base = 1
+    weight = 1
+  }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.main_tg.arn
