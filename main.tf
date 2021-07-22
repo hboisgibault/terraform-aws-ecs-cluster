@@ -17,13 +17,13 @@ data "aws_alb" "alb" {
 resource "aws_ecs_cluster" "main_cluster" {
   name        = var.application_name
   capacity_providers = [aws_ecs_capacity_provider.main_cp.name]
-
+  
   default_capacity_provider_strategy {
     capacity_provider = aws_ecs_capacity_provider.main_cp.name
     weight = 1
     base = 1
   }
-  
+
   tags = {
     Environment = var.environment_name
   }
@@ -36,7 +36,6 @@ data "aws_ecs_task_definition" "main_td" {
 resource "aws_ecs_service" "main_service" {
   name            = var.application_name
   cluster         = aws_ecs_cluster.main_cluster.id
-  launch_type     = "EC2"
   scheduling_strategy = "REPLICA"
   task_definition = "${data.aws_ecs_task_definition.main_td.family}:${data.aws_ecs_task_definition.main_td.revision}"
   desired_count   = var.target_capacity

@@ -36,6 +36,10 @@ resource "aws_ecs_capacity_provider" "main_cp" {
       target_capacity           = 100
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_autoscaling_group" "main_asg" {
@@ -49,7 +53,6 @@ resource "aws_autoscaling_group" "main_asg" {
   desired_capacity     = var.target_capacity
   vpc_zone_identifier  = data.aws_subnet_ids.subnets.ids
   wait_for_capacity_timeout = "3m"
-  termination_policies   = ["OldestInstance"]
 
   instance_refresh {
     strategy = "Rolling"
@@ -57,5 +60,15 @@ resource "aws_autoscaling_group" "main_asg" {
       min_healthy_percentage = 100
       instance_warmup = 10
     }
+  }
+
+  lifecycle {
+    ignore_changes = [desired_capacity]
+  }
+
+  tag {
+    key = "AmazonECSManaged"
+    value = ""
+    propagate_at_launch = true
   }
 }
