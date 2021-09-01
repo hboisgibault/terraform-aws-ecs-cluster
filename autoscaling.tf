@@ -13,6 +13,7 @@ resource "aws_launch_configuration" "main_lc" {
   associate_public_ip_address = true
   iam_instance_profile = "arn:aws:iam::812844034365:instance-profile/ecsInstanceRole"
   security_groups = ["${aws_security_group.main_sg.id}"]
+  enable_monitoring = false
 
   root_block_device {
     volume_size = "30"
