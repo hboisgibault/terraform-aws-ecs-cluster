@@ -7,7 +7,7 @@ data "template_file" "user_data" {
 }
 
 resource "aws_launch_configuration" "main_lc" {
-  name          = var.application_name
+  name_prefix = var.application_name
   image_id      = var.ami_id
   instance_type = var.instance_type
   associate_public_ip_address = true
@@ -21,6 +21,10 @@ resource "aws_launch_configuration" "main_lc" {
   }
 
   user_data = "${data.template_file.user_data.rendered}"
+  
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ecs_capacity_provider" "main_cp" {
