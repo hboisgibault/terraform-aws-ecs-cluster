@@ -81,6 +81,12 @@ resource "aws_autoscaling_group" "main_asg" {
   }
 
   tag {
+    key = "Name"
+    value = var.environment_name
+    propagate_at_launch = true
+  }
+
+  tag {
     key = "AmazonECSManaged"
     value = ""
     propagate_at_launch = true
