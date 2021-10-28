@@ -52,9 +52,9 @@ resource "aws_ecs_service" "main_service" {
     for_each = var.use_alb ? [1] : []
 
     content {
-        target_group_arn = aws_lb_target_group.main_tg.arn
-        container_name   = var.container_name
-        container_port   = var.container_port
+      target_group_arn = aws_lb_target_group.main_tg.arn
+      container_name   = var.container_name
+      container_port   = var.container_port
     }
   }
 
