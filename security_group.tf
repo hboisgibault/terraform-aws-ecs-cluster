@@ -34,7 +34,7 @@ resource "aws_security_group" "main_sg" {
 }
 
 data "aws_security_group" "target_sg" {
-    for_each = var.ingress_target_security_groups
+    for_each = toset(var.ingress_target_security_groups)
     name = each.value
 }
 
