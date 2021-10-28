@@ -34,17 +34,17 @@ resource "aws_security_group" "main_sg" {
 }
 
 data "aws_security_group" "target_sg" {
-    for_each = toset(var.ingress_target_security_groups)
-    name = each.value
+    count = length(var.ingress_target_security_groups)
+    name = var.ingress_target_security_groups[count.index]
 }
 
 resource "aws_security_group_rule" "ingress_traffic" {
-    count = length(data.aws_security_group.target_sg)
+    for_each = data.aws_security_group.target_sg
     type              = "ingress"
     from_port         = 0
     to_port           = 65535
     protocol          = "tcp"
     source_security_group_id = aws_security_group.main_sg.id
     prefix_list_ids = []
-    security_group_id = data.aws_security_group.target_sg[count.index].id
+    security_group_id = each.id
 }
