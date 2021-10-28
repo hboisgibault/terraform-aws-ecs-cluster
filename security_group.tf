@@ -32,3 +32,19 @@ resource "aws_security_group" "main_sg" {
       Environment = var.environment_name
     }
 }
+
+data "aws_security_group" "target_sg" {
+    for_each = var.ingress_target_security_groups
+    name = each.value
+}
+
+resource "aws_security_group_rule" "ingress_traffic" {
+    count = length(aws_security_group.target_sg)
+    type              = "ingress"
+    from_port         = 0
+    to_port           = 65535
+    protocol          = "tcp"
+    source_security_group_id = aws_security_group.main_sg.id
+    prefix_list_ids = []
+    security_group_id = aws_security_group.target_sg[count.index].id
+}

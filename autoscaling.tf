@@ -3,7 +3,7 @@
 #
 
 data "aws_subnet_ids" "subnets" {
-  count = var.subnet_ids === [] ? 1 : 0
+  count = var.subnet_ids == [] ? 1 : 0
   vpc_id = var.vpc_id
 }
 
@@ -65,7 +65,7 @@ resource "aws_autoscaling_group" "main_asg" {
   health_check_grace_period = 0
   default_cooldown     = 30
   desired_capacity     = var.target_capacity
-  vpc_zone_identifier  = var.subnet_ids === [] : data.aws_subnet_ids.subnets.ids ? var.subnet_ids
+  vpc_zone_identifier  = var.subnet_ids == [] ? data.aws_subnet_ids.subnets.ids : var.subnet_ids
   wait_for_capacity_timeout = "3m"
 
   instance_refresh {
