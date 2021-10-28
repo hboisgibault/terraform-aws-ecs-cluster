@@ -36,6 +36,18 @@ variable "instance_type" {
     description = "Instance type"
 }
 
+variable "subnet_ids" {
+    type = list(string)
+    default = []
+    description = "Subnets used by the autoscaling group"
+}
+
+variable "use_alb" {
+    type = bool
+    default = true
+    description = "Whether to use a load balancer or not"
+}
+
 variable "alb_arn" {
     type = string
     description = "Application load balancer ARN"

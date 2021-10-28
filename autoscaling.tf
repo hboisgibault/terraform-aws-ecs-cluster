@@ -1,3 +1,12 @@
+#
+# DATA
+#
+
+data "aws_subnet_ids" "subnets" {
+  count = var.subnet_ids === [] ? 1 : 0
+  vpc_id = var.vpc_id
+}
+
 data "template_file" "user_data" {
   template = "${file("${path.module}/user_data.sh")}"
 
@@ -5,6 +14,10 @@ data "template_file" "user_data" {
     ecs_cluster = var.application_name
   }
 }
+
+#
+# RESOURCES
+#
 
 resource "aws_launch_configuration" "main_lc" {
   name_prefix = var.application_name
@@ -52,7 +65,7 @@ resource "aws_autoscaling_group" "main_asg" {
   health_check_grace_period = 0
   default_cooldown     = 30
   desired_capacity     = var.target_capacity
-  vpc_zone_identifier  = data.aws_subnet_ids.subnets.ids
+  vpc_zone_identifier  = var.subnet_ids === [] : data.aws_subnet_ids.subnets.ids ? var.subnet_ids
   wait_for_capacity_timeout = "3m"
 
   instance_refresh {

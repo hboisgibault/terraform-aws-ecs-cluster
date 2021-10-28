@@ -1,16 +1,4 @@
 #
-# DATA
-#
-
-data "aws_subnet_ids" "subnets" {
-  vpc_id = var.vpc_id
-}
-
-data "aws_alb" "alb" {
-  arn  = var.alb_arn
-}
-
-#
 # RESOURCES
 #
 
@@ -60,10 +48,16 @@ resource "aws_ecs_service" "main_service" {
     weight = 1
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.main_tg.arn
-    container_name   = var.container_name
-    container_port   = var.container_port
+  dynamic "load_balancer_configuration" {
+    for_each = var.use_alb ? [1] : []
+
+    content {
+        load_balancer {
+          target_group_arn = aws_lb_target_group.main_tg.arn
+          container_name   = var.container_name
+          container_port   = var.container_port
+      }
+    }
   }
 
   ordered_placement_strategy {
