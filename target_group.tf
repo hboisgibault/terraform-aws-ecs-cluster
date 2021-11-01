@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "main_tg" {
     healthy_threshold = 2
     interval = 11
     timeout = 10
-    matcher = "200-301"
+    matcher = "200-399"
   }
 }
 
