@@ -69,10 +69,16 @@ variable "alb_listener_rule_priority" {
     description = "Load balancer listener rule priority"
 }
 
-variable "ingress_target_security_groups" {
+variable "ingress_security_groups" {
     type = list(string)
     default = []
-    description = "Security groups to allow ingress traffic to"
+    description = "List of security group names that will be allowed traffic to the instance"
+}
+
+variable "remote_ingress_security_groups" {
+    type = list(string)
+    default = []
+    description = "List of security group names to allow ingress traffic from the instance"
 }
 
 variable "target_capacity" {

@@ -33,18 +33,42 @@ resource "aws_security_group" "main_sg" {
     }
 }
 
-data "aws_security_group" "target_sg" {
-    count = length(var.ingress_target_security_groups)
-    name = var.ingress_target_security_groups[count.index]
+#
+# INGRESS SECURITY GROUPS RULES
+#
+
+data "aws_security_group" "ingress_sg" {
+    count = length(var.ingress_security_groups)
+    name = var.ingress_security_groups[count.index]
 }
 
-resource "aws_security_group_rule" "ingress_traffic" {
-    count = length(data.aws_security_group.target_sg)
+resource "aws_security_group_rule" "remote_ingress_traffic" {
+    count = length(data.aws_security_group.ingress_sg)
+    type              = "ingress"
+    from_port         = 0
+    to_port           = 65535
+    protocol          = "tcp"
+    source_security_group_id = data.aws_security_group.ingress_sg[count.index].id
+    prefix_list_ids = []
+    security_group_id = aws_security_group.main_sg.id
+}
+
+#
+# REMOTE SECURITY GROUPS
+#
+
+data "aws_security_group" "remote_sg" {
+    count = length(var.remote_ingress_security_groups)
+    name = var.remote_ingress_security_groups[count.index]
+}
+
+resource "aws_security_group_rule" "remote_ingress_traffic" {
+    count = length(data.aws_security_group.remote_sg)
     type              = "ingress"
     from_port         = 0
     to_port           = 65535
     protocol          = "tcp"
     source_security_group_id = aws_security_group.main_sg.id
     prefix_list_ids = []
-    security_group_id = data.aws_security_group.target_sg[count.index].id
+    security_group_id = data.aws_security_group.remote_sg[count.index].id
 }
