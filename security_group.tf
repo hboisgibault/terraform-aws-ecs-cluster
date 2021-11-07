@@ -42,7 +42,7 @@ data "aws_security_group" "ingress_sg" {
     name = var.ingress_security_groups[count.index]
 }
 
-resource "aws_security_group_rule" "remote_ingress_traffic" {
+resource "aws_security_group_rule" "local_ingress_traffic" {
     count = length(data.aws_security_group.ingress_sg)
     type              = "ingress"
     from_port         = 0
