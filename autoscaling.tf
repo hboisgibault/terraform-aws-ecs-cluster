@@ -36,7 +36,7 @@ resource "aws_launch_configuration" "main_lc" {
   user_data = <<EOF
     #!/bin/bash
     echo ECS_CLUSTER=${ecs_cluster} >> /etc/ecs/ecs.config
-    echo ECS_CONTAINER_INSTANCE_PROPAGATE_TAGS_FROM=ec2_instance>> /etc/ecs/ecs.config
+    echo ECS_CONTAINER_INSTANCE_PROPAGATE_TAGS_FROM=ec2_instance >> /etc/ecs/ecs.config
     ${var.user_data}
   EOF
   
