@@ -7,14 +7,6 @@ data "aws_subnet_ids" "subnets" {
   vpc_id = var.vpc_id
 }
 
-data "template_file" "user_data" {
-  template = "${file("${path.module}/user_data.sh")}"
-
-  vars = {
-    ecs_cluster = var.application_name
-  }
-}
-
 #
 # RESOURCES
 #
@@ -35,7 +27,7 @@ resource "aws_launch_configuration" "main_lc" {
 
   user_data = <<EOF
     #!/bin/bash
-    echo ECS_CLUSTER=${ecs_cluster} >> /etc/ecs/ecs.config
+    echo ECS_CLUSTER=${var.application_name} >> /etc/ecs/ecs.config
     echo ECS_CONTAINER_INSTANCE_PROPAGATE_TAGS_FROM=ec2_instance >> /etc/ecs/ecs.config
     ${var.user_data}
   EOF
