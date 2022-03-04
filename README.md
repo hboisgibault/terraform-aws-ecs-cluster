@@ -47,6 +47,7 @@ module "ecs" {
 | application_host | Host name used by the listener rule | `string` | no | yes |
 | ami_id | AMI ID used by the EC2 instances | `string` | `ami-098b0a8e497d07ea6` | no |
 | instance_type | Instance types | `string` | `t3.micro` | no |
+| user_data | Bash commands to be passed to the instance as userdata. Do NOT include a shebang. | `string` | `` | no |
 | subnet_ids | Subnets used by the autoscaling group | `list(string)` | `[]` | no |
 | use_alb | Whether to use the Application Load Balancer or not | `bool` | `true` | no |
 | alb_arn | ALB ARN | `string` | no | yes |

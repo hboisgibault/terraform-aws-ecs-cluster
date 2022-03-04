@@ -36,6 +36,12 @@ variable "instance_type" {
     description = "Instance type"
 }
 
+variable "user_data" {
+    type = string
+    default = ""
+    description = "Bash commands to be passed to the instance as user data"
+}
+
 variable "subnet_ids" {
     type = list(string)
     default = []
